@@ -10,6 +10,8 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 
 from controller import UserController
+from controller import GetMessageController
+from controller import ImageUploadController
 #from controller import RunController
 #from controller import EquipmentController
 #from controller import PkController
