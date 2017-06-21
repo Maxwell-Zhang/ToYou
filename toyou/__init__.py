@@ -1,16 +1,25 @@
 # coding: utf-8
-import redis
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_script import Manager
 
 app = Flask(__name__)
-#app.config.from_object('config.DevelopmentConfig')
-#r = redis.StrictRedis(host=app.config['REDIS_HOST'], password=app.config['REDIS_PASSWORD'],port=app.config['REDIS_PORT'])
+print "__name__ = " + __name__
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost:3306/toyou?charset=utf8mb4'
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 db = SQLAlchemy(app)
-
-from controller import UserController
+manager = Manager(app)
+#from controller import UserController
+#from controller import GetMessageController
 #from controller import RunController
 #from controller import EquipmentController
 #from controller import PkController
 #from controller import ShareController
+
+from controller import UserController
+from controller import GetMessageController
+from controller import ImageUploadController
+
+if __name__ == "__main__":
+    manager.run()
