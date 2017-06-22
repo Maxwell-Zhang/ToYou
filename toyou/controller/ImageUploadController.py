@@ -3,20 +3,12 @@ import string
 import os
 #import sys
 #sys.path.append('toyou/helpers/')
-#import requests
-#import cStringIO
-#from cStringIO import StringIO
 #import Image
 from toyou import app,db
 from toyou.helpers.UserHelper import addPostByName
 from toyou.models.Post import Post
 from toyou.models.User import User
 from toyou.models.UserFavor import UserFavor
-#from runtob.models.User import User
-#from runtob.models.UserProfile import UserProfile
-#from runtob.models.UserLoginLog import UserLoginLog
-#from runtob.models.UserFightPower import UserFightPower
-#from toyou.common import permission
 from flask import Flask,redirect,url_for,Blueprint,request,jsonify
 from werkzeug import secure_filename
 UPLOAD_FOLDER = './pic'
