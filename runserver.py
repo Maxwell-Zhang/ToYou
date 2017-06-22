@@ -1,4 +1,4 @@
-#! /usr/nim/env python
+#! /usr/bin/env python
 # coding: utf-8
 import sys
 from tornado.wsgi import WSGIContainer

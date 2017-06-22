@@ -1,20 +1,25 @@
-# coding: utf-8
+#coding: utf-8
 import time
 import random
 import string
-from runtob import app, r, db
-from runtob.models.User import User
-from runtob.models.UserProfile import UserProfile
-from runtob.models.UserLoginLog import UserLoginLog
-from runtob.models.UserFightPower import UserFightPower
-from runtob.common import permission
+from toyou  import app ,db
+#from runtob.models.User import User
+#from runtob.models.UserProfile import UserProfile
+#from runtob.models.UserLoginLog import UserLoginLog
+#from runtob.models.UserFightPower import UserFightPower
+#from runtob.common import permission
 from flask import Blueprint, request, jsonify
 
 bp = Blueprint('user', __name__)
 
 
-@bp.route('/Login', methods=['POST'])
+@bp.route('/Login', methods=['GET'])
 def login():
+    print "yesyesyes"
+    userId = request.args.get("name")
+    print str(userId)
+    return str(userId)+"sss"
+    '''
     userId = request.form['userId']
     token = request.form['token']
     loginDateTime = request.form['loginDateTime']
@@ -42,11 +47,11 @@ def login():
     db.session.commit()
     db.session.add(UserLoginLog(user.id, loginDateTime, loginLocationX, loginLocationY))
     db.session.commit()
-    return jsonify({'state': 200, 'error': '', 'data': {'loginState': 0, 'token': user.token, 'userId': user.id}})
+    return jsonify({'state': 200, 'error': '', 'data': {'loginState': 0, 'token': user.token, 'userId': user.id}}) '''
 
-
+'''
 @bp.route('/UpdateInformation', methods=['POST'])
-@permission
+#@permission
 def UpdateInformation():
     userId = request.form['userId']
     gender = request.form['gender']
@@ -68,7 +73,7 @@ def UpdateInformation():
 
 
 @bp.route('/GetInformation', methods=['POST'])
-@permission
+#@permission
 def GetInformation():
     queryId = request.form['queryId']
     user = User.query.get(queryId)
@@ -89,6 +94,6 @@ def GetInformation():
 
     }
     return jsonify({'state': 200, 'error': '', 'data': data})
-
+'''
 
 app.register_blueprint(bp, url_prefix='/User')
