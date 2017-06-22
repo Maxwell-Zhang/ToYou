@@ -10,8 +10,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost:3306/toyou?
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 db = SQLAlchemy(app)
 manager = Manager(app)
-#from controller import UserController
-#from controller import GetMessageController
+from controller import UserController
+from controller import GetMessageController
+from controller import ImageUploadController
 #from controller import RunController
 #from controller import EquipmentController
 #from controller import PkController
