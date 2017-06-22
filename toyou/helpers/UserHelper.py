@@ -187,4 +187,33 @@ def addPostByName(name, content="", tag=0, imagelist=[]):
     db.session.add(post)
     db.session.commit()
 
+def addPostByQq(qq, content="", tag=0, imagelist=[]):
+    user = User.query.filter_by(qq=qq).first()
+    if user is None:
+        print "user: " + str(qq) + " does not exist"
+        return
+    imageList = [''] * 10
+    for i in xrange(len(imagelist)):
+        imageList[i] = imagelist[i]
+
+    post = Post(userid=user.id, content=content, tag=tag, image0=imageList[0],
+            image1=imageList[1], image2=imageList[2], image3=imageList[3],
+            image4=imageList[4], image5=imageList[5], image6=imageList[6],
+            image7=imageList[7], image8=imageList[8], image9=imageList[9])
+    db.session.add(post)
+    db.session.commit()
+    
+def getMaxPostId():
+    maxId = db.session.query(db.func.max(Post.id)).scalar()
+    return maxId
+
+def getPostInfoById(postid):
+    post = Post.query.filter_by(id=postid).first()
+    if post is None:
+        print "Post ID: " + str(postid) + " is invalid"
+        return None, None, None, None, None, None
+    imagelist = [post.image0, post.image1, post.image2, post.image3,\
+                post.image4, post.image5, post.image6, post.image7, \
+                post.image8, post.image9]
+    return postid, post.userid, post.posttime, post.content, post.tag, imagelist
 
