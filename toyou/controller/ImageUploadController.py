@@ -18,7 +18,7 @@ else:
     pass
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
