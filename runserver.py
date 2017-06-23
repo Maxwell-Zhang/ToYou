@@ -7,7 +7,8 @@ from tornado.ioloop import IOLoop
 from toyou import app
 
 if __name__ == '__main__':
-    port = 5009
+    port = int(app.config['PORT'])
+    print port
     if len(sys.argv) == 2:
         port = int(sys.argv[1])
     httpServer = HTTPServer(WSGIContainer(app))
