@@ -152,11 +152,20 @@ def changeTagByName(name, taglist=[]):
 def changeTagByQq(qq, taglist=[]):
     user = User.query.filter_by(qq=qq).first()
     if user is None:
-        return []
+        return None 
     retlist = changeTagByName(user.username, taglist)
     return retlist
 
     
+def getTagByQq(qq):
+    user = User.query.filter_by(qq=qq).first()
+    if user is None:
+        return None
+    userFavor = UserFavor.query.filter_by(userid=user.id).first()
+    taglist = getTagList(userFavor)
+    return taglist
+
+
 def deleteAllTags(userFavor):
     if userFavor is None:
         return
@@ -217,3 +226,10 @@ def getPostInfoById(postid):
                 post.image8, post.image9]
     return postid, post.userid, post.posttime, post.content, post.tag, imagelist
 
+def deletePostById(postid):
+    post = Post.query.filter_by(id=postid).first()
+    if post is None:
+        return False
+    db.session.delete(post)
+    db.session.commit()
+    return True

@@ -59,4 +59,3 @@ def getOwnMessage():
 	for u in own_message:
 		message_ids.append(u.id)
 	return jsonify(result = 'true',message_ids=message_ids);
-
