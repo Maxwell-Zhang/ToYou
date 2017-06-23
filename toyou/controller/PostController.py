@@ -7,14 +7,12 @@ from toyou.helpers.UserHelper import *
 from flask import Blueprint, request, jsonify
 
 
-@app.route('/login')
-def login():
+@app.route('/delete_message')
+def deleteMessage():
     userQq = request.args.get("account")
-    user, _ = getUserByQq(userQq)
-    tag_id_array = request.args.get("tag_id_array")
-    # return tag_id_array
-    if user is None:
-        return jsonify(result='false')
-    else:
+    messageId = request.args.get("message_ID")
+    state = deletePostById(messageId)
+    if state == True:
         return jsonify(result='true')
-
+    else:
+        return jsonify(result='false')
