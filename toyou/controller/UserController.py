@@ -7,14 +7,32 @@ from toyou.helpers.UserHelper import *
 from flask import Blueprint, request, jsonify
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    userQq = request.args.get("account")
+    if request.method == 'GET':
+        print 'GET'
+        userQq = request.args.get("account")
+        tag_id_array = request.args.get("tag_id_array").split(',')
+        print userQq
+        print type(tag_id_array)
+        print tag_id_array
+    elif request.method == 'POST':
+        print 'POST'
+        userQq = request.form.get("account")
+        tag_id_array = request.form.get("tag_id_array").split(',')
+        print userQq
+        print type(tag_id_array)
+        print tag_id_array
     user, _ = getUserByQq(userQq)
-    tag_id_array = request.args.get("tag_id_array")
-    # return tag_id_array
     if user is None:
         return jsonify(result=False)
-    else:
-        return jsonify(result=True)
+    taglist = []
+    for tag in tag_id_array:
+        if tag.isdigit():
+            num = int(tag)
+            taglist += [num]
+    # return tag_id_array
+    print taglist
+    retlist = changeTagByQq(userQq, taglist)
+    return jsonify(result=True)
 
