@@ -18,16 +18,18 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.split('.')[-1] in ALLOWED_EXTENSIONS
 
-@app.route('/<name>',methods=['GET','POST'])
+@app.route('/pic/<name>',methods=['GET','POST'])
 def get_image(name=None):
 	print "request for " + str(name)
-	if name:
+	if name and allowed_file(name):
 	    image = file("./pic/{}".format(name))
 	    resp = Response(image, mimetype="image/jpeg")
 	    return resp
 
 @app.route('/image_upload',methods=['GET','POST'])
 def uploadImage():
+	content = request.form.get("message")
+	qq = request.form.get("account")
 	image_files = []
 	for key in request.files.keys():
 	    image_files.append(request.files.get(key))
@@ -36,26 +38,59 @@ def uploadImage():
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                image_URL.append(os.path.join(app.config['UPLOAD_URL_PREFIX'] + str(app.config['PORT']), filename))
+                image_URL.append(os.path.join(app.config['UPLOAD_URL_PREFIX'] + str(app.config['PORT'])+"/pic/", filename))
 	#tag_id = getAITagId(image_files)
         tag_id = 1
-	return jsonify(result='true',image_URL=image_URL,tag_id=tag_id)
+	message_id = addPostByQq(qq,content,tag,image_URL)	
+	return jsonify(result='true',tag_id=tag_id,message_id = message_id)
 
-@app.route('/new_message_upload',methods=['POST'])
+@app.route('/new_message_upload',methods=['GET','POST'])
 def uploadMessage():
-	qq =  request.form.get('account')
-	content = request.form.get('message')
-	imagelist = request.form.getlist('image_URL')
-	tag = request.form.getlist('user_tag_id')
-	addPostByQq(qq,content,tag,imagelist)
+	postid =  request.form.get('message_id')
+	tag = request.form.get('tag')
+	post = Post.query.filter_by(id=postid).first()
+	post.tag = int(tag)
+	db.session.commit()
         return jsonify(result='true')
 
-@app.route('/own_message',methods=['POST'])
+@app.route('/own_message',methods=['GET','POST'])
 def getOwnMessage():
-	qq =  request.form.get('account')
+	if request.method == "POST":
+		qq =  request.form.get('account')
+	if request.method == "GET":
+		qq = request.args.get('account')
 	user = User.query.filter_by(qq=qq).first()
 	own_message = Post.query.filter_by(userid=user.id).all()
 	messages_ids = []
 	for u in own_message:
-		message_ids.append(u.id)
-	return jsonify(result = 'true',message_ids=message_ids);
+		messages_ids.append(u.id)
+	result = []
+    	for MessageId in messages_ids:
+    		post = Post.query.filter_by(id=MessageId).first()
+    		if post is None:
+       	   		return jsonify({'state': 404, 'error': 'invalid msg id'})
+    		data = { \
+       	    	'message_id': post.id, \
+            	'message': post.content, \
+	    	'postdate': post.posttime.strftime('%Y-%m-%d'), \
+           	'posttime': post.posttime.strftime('%H:%M'), \
+            	'username': User.query.filter_by(id=post.userid).first().username \
+            	}
+		image = []
+		image.append(post.image0)
+		image.append(post.image1)
+		image.append(post.image2)
+		image.append(post.image3)
+		image.append(post.image4)
+		image.append(post.image5)
+		image.append(post.image6)
+		image.append(post.image7)
+		image.append(post.image8)
+		image2 = []
+		for img in image:
+	    		if  img!= '':
+				image2.append(app.config['UPLOAD_URL_PREFIX']+str(app.config['PORT'])+"/"+app.config["UPLOAD_FOLDER"].split('/')[-1]+'/'+img.split('/')[-1])
+		data['img_url'] = image2
+		result.append(data)
+    	return jsonify({'state': 200, 'error': '', 'data': result})
+
