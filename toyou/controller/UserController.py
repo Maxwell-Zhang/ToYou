@@ -14,7 +14,7 @@ def login():
     tag_id_array = request.args.get("tag_id_array")
     # return tag_id_array
     if user is None:
-        return jsonify(result='false')
+        return jsonify(result=False)
     else:
-        return jsonify(result='true')
+        return jsonify(result=True)
 

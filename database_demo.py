@@ -19,6 +19,11 @@ print user
 #print user
 #print taglist
 
+#deleteUserByName('zy')
+#user, taglist = getUserByName('zy')
+#print user
+#print taglist
+
 #user = addUser(name='zy', qq=1234567890, taglist=[1,5,9])
 #print user
 
@@ -26,6 +31,9 @@ print user
 #print taglist
 
 taglist = changeTagByQq(qq=1234567890, taglist=[7,8,9])
+print taglist
+
+taglist = getTagByQq(1234567890)
 print taglist
 
 addPostByName(name='zy', content="aaa", tag=1, imagelist=["addr1","addr2","addr3"])
@@ -45,7 +53,3 @@ print imagelist
 #state = deletePostById(2)
 #print state
 
-#deleteUserByName('zy')
-#user, taglist = getUserByName('zy')
-#print user
-#print taglist

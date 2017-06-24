@@ -10,7 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost:3306/toyou?
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['UPLOAD_FOLDER'] = './pic'
 app.config['UPLOAD_URL_PREFIX'] = 'http://111.231.110.120:'
-app.config['PORT'] = 5001
+app.config['PORT'] = 5008
 db = SQLAlchemy(app)
 manager = Manager(app)
 from controller import UserController

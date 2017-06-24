@@ -39,7 +39,7 @@ def uploadImage():
                 image_URL.append(os.path.join(app.config['UPLOAD_URL_PREFIX'] + str(app.config['PORT']), filename))
 	#tag_id = getAITagId(image_files)
         tag_id = 1
-	return jsonify(result='true',image_URL=image_URL,tag_id=tag_id)
+	return jsonify(result=True,image_URL=image_URL,tag_id=tag_id)
 
 @app.route('/new_message_upload',methods=['POST'])
 def uploadMessage():
@@ -48,7 +48,7 @@ def uploadMessage():
 	imagelist = request.form.getlist('image_URL')
 	tag = request.form.getlist('user_tag_id')
 	addPostByQq(qq,content,tag,imagelist)
-        return jsonify(result='true')
+        return jsonify(result=True)
 
 @app.route('/own_message',methods=['POST'])
 def getOwnMessage():
@@ -58,4 +58,4 @@ def getOwnMessage():
 	messages_ids = []
 	for u in own_message:
 		message_ids.append(u.id)
-	return jsonify(result = 'true',message_ids=message_ids);
+	return jsonify(result = True,message_ids=message_ids);
