@@ -13,6 +13,6 @@ def deleteMessage():
     messageId = request.args.get("message_ID")
     state = deletePostById(messageId)
     if state == True:
-        return jsonify(result='true')
+        return jsonify(result=True)
     else:
-        return jsonify(result='false')
+        return jsonify(result=False)

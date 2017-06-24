@@ -14,7 +14,7 @@ def add_tag():
     tag_array = request.args.get("tag_array")
     taglist = getTagByQq(userQq)
     if taglist is None:
-        return jsonify(result="false")
+        return jsonify(result=False)
 
     for tag in tag_array:
         if tag.isdigit():
@@ -25,7 +25,7 @@ def add_tag():
     #print taglist
     retlist = changeTagByQq(userQq, taglist)
     #return jsonify(result=retlist)
-    return jsonify(result='true')
+    return jsonify(result=True)
 
 @app.route('/delete_tag')
 def delete_tag():
@@ -33,10 +33,10 @@ def delete_tag():
     userQq = request.args.get("account")
     tag_array = request.args.get("tag_array")
     taglist = getTagByQq(userQq)
-    taglist = set(taglist)
     if taglist is None:
-        return jsonify(result="false")
+        return jsonify(result=False)
 
+    taglist = set(taglist)
     for tag in tag_array:
         if tag.isdigit():
             num = int(tag)        
@@ -47,4 +47,4 @@ def delete_tag():
     taglist = list(taglist)
     retlist = changeTagByQq(userQq, taglist)
     #return jsonify(result=retlist)
-    return jsonify(result='true')
+    return jsonify(result=True)
