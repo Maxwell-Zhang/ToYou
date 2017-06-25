@@ -1,0 +1,50 @@
+0 Ordinary Indoor Selfie 普通室内自拍
+1 Pet 宠物
+2 Bed 床
+3 Big Word Ad 大字广告
+4 Small Group Photo 小型集体照
+5 Poster 海报
+6 Chart 图表
+7 Pink Goods 粉色的物品
+8 Child 孩子
+9 Flower 花
+10 Cosmetic 化妆品
+11 Cosmetics Ad 化妆品广告
+12 Activity 活动
+13 Large Group Photo 大型集体照
+14 Building 建筑
+15 TV & Poster Screenshot 电视，PPT，海报截图
+16 Toy 玩具
+17 Snack 零食
+18 Landscape Photo 风景照
+19 Tourist Photo 旅游照（带人）
+20 Sunglass & Handbag 眼镜手包
+21 Photoshop Photo PS照片
+22 Star 明星
+23 Beauty Ad 美容广告
+24 Cosmetic Tips 化妆品贴士
+25 Display Rack 展架
+26 Hand & Leg 手脚
+27 Wallet & Accessory 钱包小物件
+28 Fruit & Cake 水果蛋糕
+29 WeChat Moment 朋友圈截图
+30 Motto 座右铭
+31 WeChat Expression 微信表情图（not emoji）
+32 QR-code 二维码
+33 WeChat Wallet 微信钱包截图
+34 Chat Screenshot 聊天截图
+35 Other Ad 其他广告
+36 Comic 漫画
+37 Essay 文章片段
+38 Other Goods 其他物品
+39 Shoes 鞋
+40 Necklace & Bracelet 项链手镯
+41 Clothes 衣服
+42 Baby 婴儿
+43 Full-length Photo 全身照
+44 Special Effects Photo 特效照
+45 Very Long Picture 很长的图片
+46 Meal 做的饭
+47 Outdoor Selfie 户外自拍
+48 Holding Something Selfie 拿着东西的自拍
+49 Face Mask Selfie 敷面膜自拍
