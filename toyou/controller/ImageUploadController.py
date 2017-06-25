@@ -11,6 +11,9 @@ from toyou.models.User import User
 from toyou.models.UserFavor import UserFavor
 from flask import Flask,redirect,url_for,Blueprint,request,jsonify,Response
 from werkzeug import secure_filename
+from toyou.tuyouAlgorithm.picture.picture_detection import *
+from numpy import *
+#from toyou import allclassman
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -29,19 +32,27 @@ def get_image(name=None):
 @app.route('/image_upload',methods=['GET','POST'])
 def uploadImage():
 	content = request.form.get("message")
-	qq = request.form.get("account")
+	qq = int(request.values.get("account"))
 	image_files = []
 	for key in request.files.keys():
 	    image_files.append(request.files.get(key))
 	image_URL = []
+	image_path = []
         for file in image_files:
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		image_path.append(os.path.join(app.config['UPLOAD_FOLDER'],filename))
                 image_URL.append(os.path.join(app.config['UPLOAD_URL_PREFIX'] + str(app.config['PORT'])+"/pic/", filename))
 	#tag_id = getAITagId(image_files)
+	momentpath = '/home/ubuntu/ToYou/toyou/tuyouAlgorithm/picture/moment/'
+	moment_list = os.listdir(momentpath)
+	for path in image_path:	
+		image_class = getimageclassMap(path,allclassmean)
+		print "image_class:", image_class
         tag_id = 1
-	message_id = addPostByQq(qq,content,tag,image_URL)	
+	message_id = addPostByQq(qq,content,tag_id,image_URL)	
+	print message_id
 	return jsonify(result='true',tag_id=tag_id,message_id = message_id)
 
 @app.route('/new_message_upload',methods=['GET','POST'])
@@ -56,9 +67,9 @@ def uploadMessage():
 @app.route('/own_message',methods=['GET','POST'])
 def getOwnMessage():
 	if request.method == "POST":
-		qq =  request.form.get('account')
+		qq =  int(request.form.get('account'))
 	if request.method == "GET":
-		qq = request.args.get('account')
+		qq = int(request.args.get('account'))
 	user = User.query.filter_by(qq=qq).first()
 	own_message = Post.query.filter_by(userid=user.id).all()
 	messages_ids = []

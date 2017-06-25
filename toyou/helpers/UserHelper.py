@@ -195,7 +195,7 @@ def addPostByName(name, content="", tag=0, imagelist=[]):
             image7=imageList[7], image8=imageList[8], image9=imageList[9])
     db.session.add(post)
     db.session.commit()
-    return post
+    return post.id
 
 def addPostByQq(qq, content="", tag=0, imagelist=[]):
     user = User.query.filter_by(qq=qq).first()
@@ -212,7 +212,8 @@ def addPostByQq(qq, content="", tag=0, imagelist=[]):
             image7=imageList[7], image8=imageList[8], image9=imageList[9])
     db.session.add(post)
     db.session.commit()
-    return post
+    
+    return post.id
     
 def getMaxPostId():
     maxId = db.session.query(db.func.max(Post.id)).scalar()
