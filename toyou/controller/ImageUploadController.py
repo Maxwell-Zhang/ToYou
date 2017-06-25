@@ -13,10 +13,20 @@ from flask import Flask,redirect,url_for,Blueprint,request,jsonify,Response
 from werkzeug import secure_filename
 from toyou.tuyouAlgorithm.picture.picture_detection import *
 from numpy import *
+from toyou.helpers.UserHelper import *
+from toyou.nsfw.classify_nsfw import *
 #from toyou import allclassman
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+#likecount = []
+#commentcount = []
+#import random
+#for i in range(1000):
+#    likecount.append(random.randint(3,15))
+#    commentcount.append(random.randint(0,20))
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.split('.')[-1] in ALLOWED_EXTENSIONS
@@ -39,7 +49,7 @@ def get_image(name=None):
 
 @app.route('/image_upload',methods=['GET','POST'])
 def uploadImage():
-	content = request.form.get("message")
+	content = request.values.get("message")
 	qq = int(request.values.get("account"))
 	image_files = []
 	for key in request.files.keys():
@@ -51,6 +61,8 @@ def uploadImage():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		image_path.append(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+		score = get_nsfw_score(input_file=image_path[-1])
+		print "detect result: " + str(score)
                 image_URL.append(os.path.join(app.config['UPLOAD_URL_PREFIX'] + str(app.config['PORT'])+"/pic/", filename))
 	#tag_id = getAITagId(image_files)
 	momentpath = '/home/ubuntu/ToYou/toyou/tuyouAlgorithm/picture/moment/'
@@ -59,7 +71,10 @@ def uploadImage():
 	for path in image_path:	
 		image_class.append(getimageclassMap(path,allclassmean))
 		print "image_class:", image_class[-1]
-        tag_id = int(image_class[0]) 
+        if len(image_class) > 0:
+		tag_id = int(image_class[0]) 
+	else:
+		return jsonify(result = False, error = ' there is no pictures')
 	print "tag_id: "+str(tag_id)
 	message_id = addPostByQq(qq,content,tag_id,image_URL)	
 	print message_id
@@ -67,8 +82,8 @@ def uploadImage():
 
 @app.route('/new_message_upload',methods=['GET','POST'])
 def uploadMessage():
-	postid =  request.form.get('message_id')
-	tag = request.form.get('tag')
+	postid =  request.values.get('message_id')
+	tag = request.values.get('tag')
 	post = Post.query.filter_by(id=postid).first()
 	post.tag = int(tag)
 	db.session.commit()
@@ -98,7 +113,10 @@ def getOwnMessage():
             	'message': post.content, \
 	    	'postdate': post.posttime.strftime('%Y-%m-%d'), \
            	'posttime': post.posttime.strftime('%H:%M'), \
-            	'username': User.query.filter_by(id=post.userid).first().username \
+            	'username': User.query.filter_by(id=post.userid).first().username, \
+		'account': User.query.filter_by(id=post.userid).first().qq, \
+		'likecount':likecount[int(post.id)], \
+		'commentcount':commentcount[int(post.id)] \
             	}
 		image = []
 		image.append(post.image0)
@@ -116,5 +134,6 @@ def getOwnMessage():
 				image2.append(app.config['UPLOAD_URL_PREFIX']+str(app.config['PORT'])+"/"+app.config["UPLOAD_FOLDER"].split('/')[-1]+'/'+img.split('/')[-1])
 		data['img_url'] = image2
 		result.append(data)
+	result.reverse()
     	return jsonify({'state': 200, 'error': '', 'data': result})
 

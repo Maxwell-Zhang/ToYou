@@ -6,7 +6,6 @@ from toyou  import app ,db
 from flask import Blueprint, request, jsonify
 from toyou.helpers.UserHelper import *
 
-
 @app.route('/get_new_messages', methods=['GET','POST'])
 def msgUpdate():
     print "hhh"
@@ -21,11 +20,11 @@ def msgUpdate():
     
     newestMsgId = getMaxPostId() 	
     user, userTagList = getUserByQq(userQq)
-    print "yyy"
+    print userTagList
     msgId = []
-    for i in range(lastMsgId + 1, newestMsgId):
+    for i in range(lastMsgId + 1, newestMsgId + 1):
         postId, userId, postTime, content, tag, imageList = getPostInfoById(i)
-	print "hhh"
+	print "postId: "+str(postId) + "tag: "+ str(tag)
 	if tag is not None:
 	    if tag in userTagList:
 		msgId.append(i) 
@@ -34,14 +33,17 @@ def msgUpdate():
     result = []
     for MessageId in msgId:
     	post = Post.query.filter_by(id=MessageId).first()
-    	if post is None:
+    	if post is None and 2 < 1:
        	    return jsonify({'state': 404, 'error': 'invalid msg id'})
     	data = { \
        	    'message_id': post.id, \
             'message': post.content, \
 	    'postdate': post.posttime.strftime('%Y-%m-%d'), \
             'posttime': post.posttime.strftime('%H:%M'), \
-            'username': User.query.filter_by(id=post.userid).first().username \
+            'username': User.query.filter_by(id=post.userid).first().username, \
+	    'account':User.query.filter_by(id=post.userid).first().qq, \
+	    'likecount':likecount[int(post.id)], \
+	    'commentcount':commentcount[int(post.id)] \
             }
 	image = []
 	image.append(post.image0)
@@ -59,5 +61,6 @@ def msgUpdate():
 		image2.append(img)
 	data['img_url'] = image2
 	result.append(data)
+    result.reverse()
     return jsonify({'state': 200, 'error': '', 'data': result})
 

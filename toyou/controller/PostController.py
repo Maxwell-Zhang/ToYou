@@ -9,8 +9,8 @@ from flask import Blueprint, request, jsonify
 
 @app.route('/delete_message')
 def deleteMessage():
-    userQq = request.args.get("account")
-    messageId = request.args.get("message_ID")
+    userQq = request.values.get("account")
+    messageId = request.values.get("message_ID")
     state = deletePostById(messageId)
     if state == True:
         return jsonify(result=True)

@@ -14,7 +14,7 @@ app.config['PORT'] = 5006
 db = SQLAlchemy(app, use_native_unicode="utf8")
 manager = Manager(app)
 from controller import UserController
-from controller import GetMessageController
+#from controller import GetMessageController
 from controller import ImageUploadController
 from controller import PostController
 from controller import UserFavorController

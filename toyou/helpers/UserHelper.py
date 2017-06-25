@@ -4,6 +4,16 @@ from toyou.models.UserFavor import UserFavor
 from toyou.models.Post import Post
 
 
+import random
+
+likecount = []
+commentcount = []
+
+for i in range(1000):
+    likecount.append(random.randint(2,15))
+    commentcount.append(random.randint(0,20))
+
+
 def getTagList(userFavor):
     taglist = []
     if userFavor.tag0 == 1:
