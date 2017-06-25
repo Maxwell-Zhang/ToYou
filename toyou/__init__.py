@@ -12,7 +12,6 @@ app.config['UPLOAD_FOLDER'] = '/home/ubuntu/ToYou/pic'
 app.config['UPLOAD_URL_PREFIX'] = 'http://111.231.110.120:'
 app.config['PORT'] = 5006
 db = SQLAlchemy(app, use_native_unicode="utf8")
->>>>>>> 4fc09601ab9aef3786839216fda68b15842015f6
 manager = Manager(app)
 from controller import UserController
 from controller import GetMessageController

@@ -21,6 +21,14 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.split('.')[-1] in ALLOWED_EXTENSIONS
 
+def reflect_class(class_id):
+	reflect_array = [9,2,1,9,9,9,9,1,9,4, \
+                         1,1,9,9,4,9,1,3,4,4, \
+                         1,9,0,1,1,1,0,1,3,9, \
+                         9,9,9,9,9,1,9,9,9,1, \
+                         1,1,9,0,9,9,3,4,9,9]
+	return reflect_array[int(class_id)]
+
 @app.route('/pic/<name>',methods=['GET','POST'])
 def get_image(name=None):
 	print "request for " + str(name)
@@ -47,10 +55,12 @@ def uploadImage():
 	#tag_id = getAITagId(image_files)
 	momentpath = '/home/ubuntu/ToYou/toyou/tuyouAlgorithm/picture/moment/'
 	moment_list = os.listdir(momentpath)
+	image_class = []
 	for path in image_path:	
-		image_class = getimageclassMap(path,allclassmean)
-		print "image_class:", image_class
-        tag_id = 1
+		image_class.append(getimageclassMap(path,allclassmean))
+		print "image_class:", image_class[-1]
+        tag_id = int(image_class[0]) 
+	print "tag_id: "+str(tag_id)
 	message_id = addPostByQq(qq,content,tag_id,image_URL)	
 	print message_id
 	return jsonify(result='true',tag_id=tag_id,message_id = message_id)
@@ -70,7 +80,10 @@ def getOwnMessage():
 		qq =  int(request.form.get('account'))
 	if request.method == "GET":
 		qq = int(request.args.get('account'))
+	qq = int(request.values.get('account'))
 	user = User.query.filter_by(qq=qq).first()
+	if user == None:
+		return jsonify({'state':201,'error':'the user not found!'})
 	own_message = Post.query.filter_by(userid=user.id).all()
 	messages_ids = []
 	for u in own_message:
